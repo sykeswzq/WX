@@ -7,6 +7,90 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+// ==================== Forward Declarations ====================
+// Classes that need method calls require @interface, not just @class
+@interface RewardAdViewController : UIViewController
+- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion;
+- (void)adDidFinishPlaying;
+@end
+
+@interface WCFinderRewardAdViewController : UIViewController
+- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion;
+- (void)adDidFinishPlaying;
+@end
+
+@interface onAdContainerClicked : NSObject
+- (void)onAdContainerClicked:(id)container;
+@end
+
+@interface onAdCardActionButtonClick : NSObject
+- (void)onAdCardActionButtonClick:(id)card;
+@end
+
+@interface VideoAdInfo : NSObject
+@property (nonatomic, copy) NSString *adId;
+@property (nonatomic, copy) NSString *videoUrl;
+@end
+
+@interface RewardAdViewModel : NSObject
+@property (nonatomic, assign) BOOL isRewarded;
+@property (nonatomic, copy) NSString *rewardType;
+- (void)onRewardEarned;
+@end
+
+@interface MagicAdMiniProgramService : NSObject
++ (instancetype)sharedService;
+- (void)onMiniProgramAdClose:(NSDictionary *)info;
+@end
+
+@interface MagicAdMiniProgramCallback : NSObject
+@property (nonatomic, copy) void (^callbackBlock)(BOOL success);
+- (void)onAdClose:(BOOL)success;
+@end
+
+@interface MagicAdPublicService : NSObject
++ (instancetype)sharedService;
+- (void)onAdClose:(NSDictionary *)info;
+@end
+
+@interface MagicAdBrandService : NSObject
++ (instancetype)sharedService;
+- (void)onAdClose:(NSDictionary *)info;
+@end
+
+@interface MagicAdExposureTimer : NSObject
+- (void)stop;
+@end
+
+@interface MagicAdCGIMgr : NSObject
++ (instancetype)sharedMgr;
+- (void)onAdClose:(NSDictionary *)info;
+@end
+
+@interface MagicAdInfo : NSObject
+@property (nonatomic, copy) NSString *adId;
+@property (nonatomic, copy) NSString *adType;
+@end
+
+@interface MagicAdCommonService : NSObject
++ (instancetype)sharedService;
+- (void)onAdClose:(NSDictionary *)info;
+@end
+
+@interface MagicAdTimerHelper : NSObject
++ (void)cancelTimer;
+@end
+
+@interface MagicAdPushMgrService : NSObject
++ (instancetype)sharedService;
+- (void)onAdClose:(NSDictionary *)info;
+@end
+
+@interface WCShareAdMgr : NSObject
++ (instancetype)sharedMgr;
+- (void)onAdClose:(NSDictionary *)info;
+@end
+
 // ==================== 1. WAJSEventHandler - Mini Program Ad Entry Point ====================
 // This is the JS API handler that mini programs call to show rewarded video ads
 // Hooking this intercepts the ad before it even loads
