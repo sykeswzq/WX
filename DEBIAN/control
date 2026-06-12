@@ -1,0 +1,9 @@
+Package: com.sykes.wechtno74
+Name: WeChatNoAds74
+Version: 1.0.0
+Architecture: iphoneos-arm64
+Description: WeChat 8.0.74+ Mini Program Ad Accelerator - MagicAd framework interceptor
+Maintainer: sykes
+Author: sykes
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000), firmware (>= 15.0)
