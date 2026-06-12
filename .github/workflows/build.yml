@@ -1,0 +1,35 @@
+name: Build WeChatNoAds74
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Theos
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y fakeroot dpkg
+        export THEOS=~/theos
+        git clone --recursive https://github.com/theos/theos.git $THEOS
+        echo "THEOS=$THEOS" >> $GITHUB_ENV
+        
+    - name: Build Package
+      run: |
+        export THEOS=~/theos
+        export PATH="$THEOS/bin:$PATH"
+        make clean
+        make package FINALPACKAGE=1
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: WeChatNoAds74
+        path: packages/*.deb
