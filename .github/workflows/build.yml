@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: theos/theos:latest
+      image: qusic/theos:latest
     
     steps:
     - name: Checkout
@@ -17,7 +17,6 @@ jobs:
 
     - name: Build Package
       run: |
-        export THEOS=/opt/theos
         make clean
         make package FINALPACKAGE=1
         
