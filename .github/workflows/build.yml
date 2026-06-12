@@ -22,7 +22,10 @@ jobs:
         # Download iOS SDK
         mkdir -p $THEOS/sdks
         curl -sL https://github.com/theos/sdks/archive/master.tar.gz | tar xz -C $THEOS/sdks --strip-components=1
-        ls $THEOS/sdks/
+        # Download Linux toolchain
+        mkdir -p $THEOS/toolchain
+        curl -sL https://github.com/theos/toolchain/releases/latest/download/linux-x86_64-Clang-16-Swift-5.10.tar.xz | tar xJ -C $THEOS/toolchain
+        ls $THEOS/toolchain/
         echo "THEOS=$THEOS" >> $GITHUB_ENV
         
     - name: Build Package
