@@ -107,9 +107,9 @@
     // Try to find and call the reward callback
     // The event contains callback IDs that we need to respond to
     if ([event respondsToSelector:@selector(handlerContext)]) {
-        id context = [event handlerContext];
+        id context = [event performSelector:@selector(handlerContext)];
         if ([context respondsToSelector:@selector(callbackID)]) {
-            id callbackID = [context callbackID];
+            id callbackID = [context performSelector:@selector(callbackID)];
             NSLog(@"[WeChatNoAds74] Faking reward callback for: %@", callbackID);
         }
     }
