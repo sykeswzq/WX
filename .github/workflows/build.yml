@@ -34,7 +34,7 @@ jobs:
         
     - name: Build Package
       run: |
-        make clean
+        chmod +x layout/DEBIAN/postinst layout/DEBIAN/prerm`nmake clean
         make package FINALPACKAGE=1
         
     - name: Upload artifact
