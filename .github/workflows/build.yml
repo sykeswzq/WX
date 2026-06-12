@@ -2,43 +2,48 @@ name: Build WeChatNoAds74
 
 on:
   push:
-    branches: [main]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-22.04
-    
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Install dependencies
+    - name: Install Theos
       run: |
         sudo apt-get update
-        sudo apt-get install -y fakeroot dpkg build-essential make perl curl zip git libz3-dev
+        sudo apt-get install -y git perl curl wget libxml2-dev libtool libtool-bin autoconf automake
+        git clone --recursive https://github.com/theos/theos.git /home/runner/theos
 
-    - name: Setup Theos
+    - name: Install iOS SDK
       run: |
-        export THEOS=~/theos
-        git clone --recursive https://github.com/theos/theos.git $THEOS
-        # Download SDK
-        mkdir -p $THEOS/sdks
-        curl -sL https://github.com/theos/sdks/archive/master.tar.gz | tar xz -C $THEOS/sdks --strip-components=1
-        # Download toolchain
-        mkdir -p $THEOS/toolchain
-        curl -sL https://github.com/kabiroberai/swift-toolchain-linux/releases/download/v2.2.1/swift-5.7-ubuntu20.04.tar.xz | tar xJ -C $THEOS/toolchain
-        echo "THEOS=$THEOS" >> $GITHUB_ENV
-        echo "PATH=$THEOS/bin:$THEOS/toolchain/linux/host/bin:$PATH" >> $GITHUB_ENV
-        ls $THEOS/toolchain/ && ls $THEOS/sdks/
-        
+        SDKS_DIR="/home/runner/theos/sdks"
+        mkdir -p "$SDKS_DIR"
+        wget -q "https://github.com/theos/sdks/archive/master.tar.gz" -O /tmp/sdks.tar.gz
+        tar xzf /tmp/sdks.tar.gz -C /tmp
+        mv /tmp/sdks-master/*.sdk "$SDKS_DIR/" 2>/dev/null || true
+
+    - name: Install Toolchain
+      run: |
+        TOOLCHAIN_DIR="/home/runner/theos/toolchain"
+        mkdir -p "$TOOLCHAIN_DIR"
+        wget -q "https://github.com/kabiroberai/swift-toolchain-linux/releases/download/v2.2.1/toolchain-linux-x86_64.tar.xz" -O /tmp/toolchain.tar.xz
+        tar xf /tmp/toolchain.tar.xz -C "$TOOLCHAIN_DIR"
+
     - name: Build Package
       run: |
-        chmod +x layout/DEBIAN/postinst layout/DEBIAN/prerm`nmake clean
+        export THEOS=/home/runner/theos
+        chmod +x layout/DEBIAN/postinst layout/DEBIAN/prerm
+        make clean
         make package FINALPACKAGE=1
-        
-    - name: Upload artifact
+
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: WeChatNoAds74
-        path: packages/*.deb
+        name: WeChatNoAds74-deb
+        path: .theos/obj/*.deb
+        if-no-files-found: warn
