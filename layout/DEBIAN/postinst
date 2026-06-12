@@ -1,0 +1,42 @@
+#!/bin/bash
+# postinst - Write ad domain blocking to hosts file
+
+# Backup hosts if not already backed up
+if [ ! -f /etc/hosts.bak.WeChatNoAds74 ]; then
+    cp /etc/hosts /etc/hosts.bak.WeChatNoAds74
+fi
+
+# Add ad domain blocks
+HOSTS_MARKER="# WeChatNoAds74 Ad Block (start)"
+HOSTS_END="# WeChatNoAds74 Ad Block (end)"
+
+# Remove old entries if exist
+sed -i "/$HOSTS_MARKER/,/$HOSTS_END/d" /etc/hosts
+
+# Add new entries
+cat >> /etc/hosts << 'HOSTS_BLOCK'
+# WeChatNoAds74 Ad Block (start)
+127.0.0.1 gdt.com
+127.0.0.1 gdtimg.com
+127.0.0.1 gdtstatic.com
+127.0.0.1 gtimg.cn
+127.0.0.1 ad.qq.com
+127.0.0.1 ads.qq.com
+127.0.0.1 pgdt.gtimg.cn
+127.0.0.1 t.gdt.qq.com
+127.0.0.1 v.gdt.qq.com
+127.0.0.1 mi.gdt.qq.com
+127.0.0.1 pgdt.ugdtimg.com
+127.0.0.1 open.e.qq.com
+127.0.0.1 h5.e.qq.com
+127.0.0.1 qq.com
+127.0.0.1 adsmind.ugdtimg.com
+127.0.0.1 adsmind.gdtimg.com
+127.0.0.1 buzzhouse.qq.com
+127.0.0.1 miniappad.qq.com
+127.0.0.1 magicad.tencent.com
+127.0.0.1 ad.reachmads.com
+# WeChatNoAds74 Ad Block (end)
+HOSTS_BLOCK
+
+echo "WeChatNoAds74: hosts file updated with ad domain blocks"
