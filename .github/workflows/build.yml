@@ -45,5 +45,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: WeChatNoAds74-deb
-        path: .theos/obj/*.deb
+        path: packages/*.deb
         if-no-files-found: warn
