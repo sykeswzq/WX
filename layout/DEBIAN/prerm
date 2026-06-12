@@ -1,0 +1,10 @@
+#!/bin/bash
+# prerm - Restore hosts file
+
+HOSTS_MARKER="# WeChatNoAds74 Ad Block (start)"
+HOSTS_END="# WeChatNoAds74 Ad Block (end)"
+
+# Remove the ad block entries
+sed -i "/$HOSTS_MARKER/,/$HOSTS_END/d" /etc/hosts
+
+echo "WeChatNoAds74: hosts file restored"
